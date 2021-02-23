@@ -3,10 +3,15 @@ package com.dev.curdProject.dto;
 import java.time.LocalDate;
 import java.util.Objects;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Past;
+import javax.validation.constraints.PositiveOrZero;
 
-
-
+import com.dev.curdProject.validation.flightMfdBy;
 import com.fasterxml.jackson.annotation.JsonFormat;
+
+
+
 
 public class FlightDto 
 {
@@ -14,16 +19,19 @@ public class FlightDto
 	
 	private Integer id;
 	
-	
+	@NotNull
 	private String flightNumber;
 	
-
+	@NotNull
+	@PositiveOrZero(message = "Invaild Capacity Value")
 	private Integer capacity;
 	
-	
+	@NotNull
+	@flightMfdBy
 	private String mfdBy;
 	
-	
+	@NotNull
+	@Past(message = "date cannot be future value")
 	@JsonFormat(pattern = "MM/dd/yyyy")
 	private LocalDate mfdOn;
 

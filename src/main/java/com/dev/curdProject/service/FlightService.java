@@ -1,14 +1,16 @@
 package com.dev.curdProject.service;
 
+
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.dev.curdProject.dto.FlightDto;
 import com.dev.curdProject.entity.Flight;
@@ -42,7 +44,7 @@ public class FlightService implements IFlightService {
 		}
 		else
 		{
-			//TODO throw Exception
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Flight Not Found");
 		}
 		return dto;
 	}
@@ -61,7 +63,7 @@ public class FlightService implements IFlightService {
 		}
 		else
 		{
-			//TODO throw Exception
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Flight Not Found");
 		}
 		
 		return flightDto;
@@ -79,7 +81,7 @@ public class FlightService implements IFlightService {
 		}
 		else
 		{
-			//TODO throw Exception
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Flight Not Found"); 
 		}	
 		
 	}

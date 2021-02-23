@@ -2,7 +2,11 @@ package com.dev.curdProject.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+import javax.validation.constraints.Positive;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,6 +19,7 @@ import com.dev.curdProject.dto.FlightDto;
 import com.dev.curdProject.service.IFlightService;
 
 @RestController
+@Validated //it is used for enable path variable validation
 public class FlightController 
 {
 	
@@ -22,7 +27,7 @@ public class FlightController
 	IFlightService flightService;
 	
 	@GetMapping(path = "/flight/{id}")
-	public FlightDto getFlight(@PathVariable(name = "id") Integer flightId)
+	public FlightDto getFlight(@PathVariable(name = "id") @Positive Integer flightId)
 	{
 		return flightService.getFlight(flightId);
 	}
@@ -34,7 +39,7 @@ public class FlightController
 	}
 	
 	@PostMapping(path="/flight")
-	public FlightDto createFlight(@RequestBody FlightDto flightDto)
+	public FlightDto createFlight(@RequestBody @Valid FlightDto flightDto)
 	{
 		
 		return flightService.createFlight(flightDto);
