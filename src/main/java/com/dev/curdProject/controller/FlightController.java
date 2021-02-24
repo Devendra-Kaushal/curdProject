@@ -5,6 +5,8 @@ import java.util.List;
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -23,12 +25,20 @@ import com.dev.curdProject.service.IFlightService;
 public class FlightController 
 {
 	
+//	private static Logger logger = LogManager.getLogger(FlightController.class);
+	
 	@Autowired
 	IFlightService flightService;
 	
 	@GetMapping(path = "/flight/{id}")
 	public FlightDto getFlight(@PathVariable(name = "id") @Positive Integer flightId)
 	{
+//		
+//		logger.info("info flightId = "+flightId);
+//		logger.debug("debug flightId = "+flightId);
+//		logger.warn("warn flightId = "+flightId);
+//		logger.error("error flightId = "+flightId);
+//		logger.trace("trace flightId = "+flightId);
 		return flightService.getFlight(flightId);
 	}
 	

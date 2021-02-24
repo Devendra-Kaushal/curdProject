@@ -35,17 +35,12 @@ public class FlightService implements IFlightService {
 
 	@Override
 	public FlightDto getFlight(Integer flightId) {
-		Optional<Flight> flight = flightRepo.findById(flightId);
-		FlightDto dto = null;
-		if(flight.isPresent())
-		{
-			dto = new FlightDto();
-			BeanUtils.copyProperties(flight.get(), dto);
-		}
-		else
-		{
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Flight Not Found");
-		}
+		Flight flight = flightRepo.findById(flightId).orElseThrow(() -> {
+			return  new ResponseStatusException(HttpStatus.NOT_FOUND, "Flight Not Found");
+		});
+		FlightDto dto = new FlightDto();
+			BeanUtils.copyProperties(flight, dto);
+		
 		return dto;
 	}
 
