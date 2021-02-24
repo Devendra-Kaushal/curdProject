@@ -23,13 +23,13 @@ public class LoggingAspect {
 	
 	private static final Logger logger = LogManager.getLogger(LoggingAspect.class);
 	
-	@Pointcut("within(@com.dev.curdProject.controller.*)")
+	@Pointcut("within(com.dev.curdProject.controller.*)")
 	public void applicationControllerPackage()
 	{
 		
 	}
 	
-	@Around("within(@org.springframework.web.bind.annotation.RestController *) && applicationControllerPackage")
+	@Around("within(@org.springframework.web.bind.annotation.RestController *) && applicationControllerPackage()")
 	public Object logAround(ProceedingJoinPoint joinpoint) throws Throwable
 	{
 		
