@@ -8,6 +8,10 @@ import javax.validation.constraints.Positive;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.Link;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,7 +35,7 @@ public class FlightController
 	IFlightService flightService;
 	
 	@GetMapping(path = "/flight/{id}")
-	public FlightDto getFlight(@PathVariable(name = "id") @Positive Integer flightId)
+	public EntityModel<FlightDto> getFlight(@PathVariable(name = "id") @Positive Integer flightId)
 	{
 //		
 //		logger.info("info flightId = "+flightId);
@@ -39,27 +43,46 @@ public class FlightController
 //		logger.warn("warn flightId = "+flightId);
 //		logger.error("error flightId = "+flightId);
 //		logger.trace("trace flightId = "+flightId);
-		return flightService.getFlight(flightId);
+		
+		Link link = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(FlightController.class).getFlight(flightId)).withSelfRel();
+		FlightDto dto =  flightService.getFlight(flightId);
+		dto.add(link);
+		return EntityModel.of(dto);
 	}
 	
 	@GetMapping(path = "/flights")
-	public List<FlightDto> getAllFlights()
+	public CollectionModel<FlightDto> getAllFlights()
 	{
-		return flightService.getAllFlights();
+		List<FlightDto> list = flightService.getAllFlights();
+		for(FlightDto dto : list)
+		{
+			Link link = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(FlightController.class).getFlight(dto.getId())).withSelfRel();
+			dto.add(link);
+		}
+		Link link = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(FlightController.class).getAllFlights()).withSelfRel();
+
+		return CollectionModel.of(list,link);
 	}
 	
 	@PostMapping(path="/flight")
-	public FlightDto createFlight(@RequestBody @Valid FlightDto flightDto)
+	public EntityModel<FlightDto> createFlight(@RequestBody @Valid FlightDto flightDto)
 	{
+		FlightDto dto =  flightService.createFlight(flightDto);
+		Link link = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(FlightController.class).getFlight(dto.getId())).withSelfRel();
 		
-		return flightService.createFlight(flightDto);
+		dto.add(link);
+		return EntityModel.of(dto);
 	}
 	
 	@PutMapping(path="/flight")
-	public FlightDto updateFlight(@RequestBody FlightDto flightDto)
+	public EntityModel<FlightDto> updateFlight(@RequestBody FlightDto flightDto)
 	{
+		FlightDto dto =  flightService.updateFlight(flightDto);
+		Link link = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(FlightController.class).getFlight(dto.getId())).withSelfRel();
 		
-		return flightService.updateFlight(flightDto);
+		dto.add(link);
+		return EntityModel.of(dto);
+	
 	}
 	
 	@DeleteMapping(path = "/flight/delete/{id}")
